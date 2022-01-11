@@ -1,0 +1,158 @@
+<div *ngIf="!esResponsivo; else responsivo" class="ui container">
+  <div id="divblack" class="following bar" #divElement>
+    <div class="ui large secondary inverted pointed fixed menu">
+      <a class="item sin-hover">ESCUELAS FUTBOL</a>
+      <div class="right item">
+        <a routerLink="/" routerLinkActive='active' [routerLinkActiveOptions]="{exact: true}"
+           class="item">Contactenos</a>
+        <a routerLink="/" class="item">Escuelas</a>
+        <a class="item">Servicios</a>
+        <a routerLink="/nosotros" routerLinkActive='active' class="item">Nosotros</a>
+        <a *ngIf="!loginService.estaAutenticado()" class="item" (click)="open()">Login</a>
+        <a *ngIf="loginService.estaAutenticado()" (click)="logOut()" class="item">Cerrar Sesion</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #responsivo>
+  <div class="ui container" #navMovil>
+    <div id="divblack" class="following bar mobile" #divElement>
+      <div class="ui large secondary inverted pointed fixed menu">
+        <a class="item sin-hover">ESCUELAS FUTBOL</a>
+        <div class="right item">
+          <a class="item" (click)="collapse = !collapse"><i class="bars icon"></i></a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div [suiCollapse]="!collapse" class="following bar nav-mobile">
+    <div class="ui segments">
+      <a routerLink="/">
+        <div class="ui segment drop-nav-items">
+          <p>Contactenos</p>
+        </div>
+      </a>
+      <a routerLink="/">
+        <div class="ui segment drop-nav-items">
+          <p>Escuelas</p>
+        </div>
+      </a>
+      <a>
+        <div class="ui segment drop-nav-items">
+          <p>Servicios</p>
+        </div>
+      </a>
+      <a routerLink="/nosotros">
+        <div class="ui segment drop-nav-items">
+          <p>Nosotros</p>
+        </div>
+      </a>
+      <a *ngIf="!loginService.estaAutenticado()" (click)="open()">
+        <div class="ui segment drop-nav-items">
+          <p>Login</p>
+        </div>
+      </a>
+      <a *ngIf="loginService.estaAutenticado()" (click)="logOut()">
+        <div class="ui segment drop-nav-items">
+          <p>Cerrar Sesion</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</ng-template>
+
+<!--Modal de Inicio Sesion-->
+<ng-template let-context let-modal="modal" #modalTemplate>
+  <div class="header">
+    <h3 class="ui center aligned header">
+      Iniciar Sesion
+    </h3>
+  </div>
+
+  <div class="ui content" *ngIf="!modalActivo">
+    <div class="ui center aligned basic segment">
+      <div class="row">
+        <div class="ui icon header ">
+          <i class="users icon"></i>
+          Selecciona el tipo de usuario.
+        </div>
+        <br>
+      </div>
+      <div class="ui two column divided grid">
+        <div class="row">
+          <div class="column">
+            <a class="ui card blue" (click)="nextModal('Administrador')">
+              <div class="content">
+                <div class="meta">
+                  <h3>Administrador</h3>
+                </div>
+              </div>
+
+            </a>
+          </div>
+          <div class="column">
+            <a class="ui grey card" (click)="nextModal('Profesor')">
+              <div class="content">
+                <div class="meta">
+                  <h3>Profesor</h3>
+                </div>
+              </div>
+
+            </a>
+          </div>
+
+        </div>
+      </div>
+      <div class="ui horizontal divider">
+        O
+      </div>
+      <div class="ui center aligned basic segment">
+        <a class="ui card red" style="width: 100%;" (click)="nextModal('Apoderado')">
+          <div class="content">
+            <div class="meta">
+              <h3>Apoderado</h3>
+            </div>
+          </div>
+
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="content" #inputs *ngIf="modalActivo">
+    <form class="ui form" (ngSubmit)="modal.approve()" #f="ngForm">
+      <div class="field" [ngClass]="{'error': inputRut.touched && !inputRut.valid}">
+        <div class="ui left icon input">
+          <input type="text" ngModel name="txtRut" minlength="8" maxlength="9" placeholder="Rut" validateRut formatRut
+                 required #inputRut="ngModel">
+          <i class="user icon"></i>
+        </div>
+      </div>
+      <div class="field" [ngClass]="{'error': inputClave.touched && !inputClave.valid}">
+        <div class="ui left icon input">
+          <input type="password" ngModel name="txtClave" placeholder="Contraseña" required #inputClave="ngModel">
+          <i class="key icon"></i>
+        </div>
+      </div>
+      <div class="actions">
+
+        <input type="submit" class="ui green button" [disabled]="!f.valid" autofocus value="Iniciar Sesion">
+
+      </div>
+      <br>
+      <a (click)="volver()" style="cursor: pointer;"> <i class="arrow left icon"></i>volver</a>
+    </form>
+
+  </div>
+
+</ng-template>
+
+
+<!--Modal de Cargando-->
+<ng-template let-context let-modal="modal" #modalCargar>
+  <div class="ui medium text loader">Cargando</div>
+</ng-template>
